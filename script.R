@@ -21,6 +21,8 @@ submission.rf <- data.frame(id=test$id, Class_1=NA, Class_2=NA, Class_3=NA, Clas
 #tree based method
 
 tree.otto = tree(target ~ . -id, data=train)
+submission.tree[,2:10] <- predict( tree.otto,test,type="vector")
+write.csv(submission.tree,"tree.submission.csv")
 plot(tree.otto)
 text(tree.otto,pretty=0)
 print(summary(tree.otto))
