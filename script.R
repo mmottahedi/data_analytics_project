@@ -1,5 +1,5 @@
 # set cwd
-setwd("/home/mfc/cwd/Data_project/Data_project")
+#setwd("/home/mfc/cwd/Data_project/Data_project")
 set.seed(1234)
 
 #load packages
