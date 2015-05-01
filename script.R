@@ -126,7 +126,7 @@ pred.boost <- max.col(abs(pred.boost[,,1]))
 #        target$t[i] = strsplit(as.character(data.test$target),"_")[[i]][2]
 # }
 #
-# target <- read.csv("test_class_index.csv")
+target <- read.csv("test_class_index.csv")
 
 # pred.boost.table <- table(pred.boost,target$t)
 # sum(pred.boost.table* diag(9))/sum(pred.boost.table)
