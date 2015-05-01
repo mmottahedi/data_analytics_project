@@ -19,6 +19,9 @@ submission.rf <- data.frame(id=test$id, Class_1=NA, Class_2=NA, Class_3=NA, Clas
 
 submission.bagging <- data.frame(id=test$id, Class_1=NA, Class_2=NA, Class_3=NA, Class_4=NA, Class_5=NA, Class_6=NA, Class_7=NA, Class_8=NA, Class_9=NA)
 
+submission.boost <- data.frame(id=test$id, Class_1=NA, Class_2=NA, Class_3=NA, Class_4=NA, Class_5=NA, Class_6=NA, Class_7=NA, Class_8=NA, Class_9=NA)
+
+
 #hist(train$feat_1)
 
 
@@ -112,5 +115,21 @@ ggsave("2_feature_importance.png", p, height=20, width=8, units="in")
 
 
 # boosting
-boost <- gbm(target ~ .-id ,data=train[train.n,],  )
+boost <- gbm(target ~ .-id ,data=train[train.n,], n.trees = 5000, interaction.depth = 4  )
 
+pred.boost <- predict(boost ,data.test,n.trees = 5000)
+pred.boost <- max.col(abs(pred.boost[,,1]))
+
+target = data.frame(id=data.test$id,t=NA)
+for (i in 1:length(data.test$target)){
+        target$t[i] = strsplit(as.character(data.test$target),"_")[[i]][2]
+}
+
+
+pred.boost.table <- table(pred.boost,target$t)
+sum(pred.boost.table* diag(9))/sum(pred.boost.table)
+
+
+#make submission with random forest
+submission.boost[,2:10] <- abs(predict(boost, test[,-1],n.trees = 20 )[,,1])
+write.csv(submission.boost,"boost.submission.csv")
