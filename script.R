@@ -81,9 +81,16 @@ sum(pred.bagging.table* diag(9))/sum(pred.bagging.table)
 submission.bagging[,2:10] <- predict( bag.otto,test,type="prob")
 write.csv(submission.bagging,"bag.submission.csv")
 
+# tune random forest to find a good value for m
+
+ tune.m <- tuneRF(train[train.n,2:94],train$target[train.n],ntreeTry = 1000,
+                  stepFactor=2, improve=0.05,trace=T,plot=T,doBest=F)
+
+
 #random FOrest with m = 10
 
-#rf <- randomForest(train[train.n,c(-1,-95)], as.factor(train$target[train.n]), mtry=10 ,importance=TRUE)
+rf <- randomForest(train[train.n,c(-1,-95)], as.factor(train$target[train.n]),
+                   mtry=18,ntree =2000,importance=F)
 
 pred.rf <- predict(rf,data.test)
 
